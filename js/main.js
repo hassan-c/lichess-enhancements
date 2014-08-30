@@ -83,6 +83,9 @@ var updateScore = function() {
 	var scoreWhite = 0;
 	var scoreBlack = 0;
 
+	var $scoreWhite = $('#le-white-score');
+	var $scoreBlack = $('#le-black-score');
+
 	$('.lichess_cemetery.black .piece').each(function() {
 		// Temporary fix for flickering problem.
 		$(this).show();
@@ -107,18 +110,18 @@ var updateScore = function() {
 	});
 
 	if (scoreWhite > scoreBlack) {
-		$('#le-white-score').css({'color' : '#759900'}); // green
-		$('#le-black-score').css({'color' : '#ac524f'}); // red
+		$scoreWhite.css({'color' : '#759900'}); // green
+		$scoreBlack.css({'color' : '#ac524f'}); // red
 	} else if (scoreBlack > scoreWhite) {
-		$('#le-white-score').css({'color' : '#ac524f'});
-		$('#le-black-score').css({'color' : '#759900'});
+		$scoreWhite.css({'color' : '#ac524f'});
+		$scoreBlack.css({'color' : '#759900'});
 	} else {
-		$('#le-white-score').css({'color' : 'inherit'});
-		$('#le-black-score').css({'color' : 'inherit'});
+		$scoreWhite.css({'color' : 'inherit'});
+		$scoreBlack.css({'color' : 'inherit'});
 	}
 
-	$('#le-white-score').text(scoreWhite);
-	$('#le-black-score').text(scoreBlack);
+	$scoreWhite.text(scoreWhite);
+	$scoreBlack.text(scoreBlack);
 };
 
 updateScore();
@@ -201,9 +204,11 @@ var boardObserver = new MutationObserver(function(mutations) {
 		var moveNum = chess.history().length / 2;
 		var moveStyle = cloneExists ? 'moveNew' : 'moveOn';
 
+		var $gameText = $('#le-GameText');
+
 		// We might have hidden the PGN box earlier if we didn't have any moves.
 		// So now we show it again.
-		$('#le-GameText').show();
+		$gameText.show();
 
 		// @todo Clean this up.
 
@@ -215,16 +220,16 @@ var boardObserver = new MutationObserver(function(mutations) {
 		
 		moveMarkup += ('<a class="le-move notranslate ' + moveStyle + '" id="le-move-' + (moveNum * 2) + '">' + move.san + '</a>');
 
-		$('#le-GameText').append(moveMarkup);
+		$gameText.append(moveMarkup);
 
 		// We don't want to scroll to the latest move if we're browsing earlier
 		// ones. Also, we check if #le-GameText actually exists to avoid errors
 		// like "cannot read property scrollHeight of undefined" which sometimes
 		// happens if we try to perform scrollTop on #le-GameText if it hasn't
 		// yet been loaded into the DOM.
-		if (!cloneExists && $('#le-GameText').length) {
+		if (!cloneExists && $gameText.length) {
 			// Scroll to bottom.
-			$('#le-GameText').scrollTop($('#le-GameText')[0].scrollHeight);
+			$gameText.scrollTop($gameText[0].scrollHeight);
 		}
 	});
 });
