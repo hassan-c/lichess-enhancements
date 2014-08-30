@@ -1,0 +1,29 @@
+{
+    "manifest_version": 2,
+
+    "name": "Lichess Enhancements",
+    "description": "Go back and view earlier moves during the game, see a relative score based on captured pieces, and more.",
+    "version": "0.0.0.1",
+
+    "icons": {
+        "48": "img/knight_plus_48.png",
+        "128": "img/knight_plus_128.png"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["http://*.lichess.org/*"],
+            "css": ["css/style.css"],
+            "js": [
+                "js/vendor/jquery-2.1.1.min.js",
+                "js/vendor/chess.min.js",
+                "js/main.js"
+            ]
+        }
+    ],
+
+    "web_accessible_resources": [
+        "view/game-buttons.html",
+        "view/pgn.html"
+    ]
+}
