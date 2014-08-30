@@ -129,8 +129,11 @@ var from = null;
 
 var boardObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
+
+		var mutationTarget = $(mutation.target);
+
 		// Only observe mutations from moves.
-		if (!$(mutation.target).hasClass('moved')) {
+		if (!mutationTarget.hasClass('moved')) {
 			return;
 		}
 
@@ -139,7 +142,7 @@ var boardObserver = new MutationObserver(function(mutations) {
 			return;
 		}
 
-		var piece = $(mutation.target).find('.piece');
+		var piece = mutationTarget.find('.piece');
 
 		// If div.piece doesn't exist, then we know the mutation is due to the
 		// cell from which the piece moved.
@@ -188,13 +191,15 @@ var boardObserver = new MutationObserver(function(mutations) {
 
 		// Append new moves to the PGN.
 
-		if (!$('.le-clone').length) {
+		var cloneExists = $('.le-clone').length;
+
+		if (!cloneExists) {
 			$('#le-GameText .moveOn').removeClass('moveOn');
 		}
 
 		var moveMarkup = '';
 		var moveNum = chess.history().length / 2;
-		var moveStyle = $('.le-clone').length ? 'moveNew' : 'moveOn';
+		var moveStyle = cloneExists ? 'moveNew' : 'moveOn';
 
 		// We might have hidden the PGN box earlier if we didn't have any moves.
 		// So now we show it again.
@@ -217,7 +222,7 @@ var boardObserver = new MutationObserver(function(mutations) {
 		// like "cannot read property scrollHeight of undefined" which sometimes
 		// happens if we try to perform scrollTop on #le-GameText if it hasn't
 		// yet been loaded into the DOM.
-		if (!$('.le-clone').length && $('#le-GameText').length) {
+		if (!cloneExists && $('#le-GameText').length) {
 			// Scroll to bottom.
 			$('#le-GameText').scrollTop($('#le-GameText')[0].scrollHeight);
 		}
