@@ -129,19 +129,20 @@ updateScore();
 // Observe the board for moves being made and perform the same moves on the
 // chess.js board.
 var from = null;
+var promoteTo = 'q';
 
 var boardObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
+		
+		if (_ld_.game.variant === 'chess960') {
+			updateScore();
+			return;
+		}
 
 		var mutationTarget = $(mutation.target);
 
 		// Only observe mutations from moves.
 		if (!mutationTarget.hasClass('moved')) {
-			return;
-		}
-
-		if (_ld_.game.variant === 'chess960') {
-			updateScore();
 			return;
 		}
 
@@ -156,7 +157,8 @@ var boardObserver = new MutationObserver(function(mutations) {
 
 		var move = chess.move({
 			from: from,
-			to: mutation.target.id
+			to: mutation.target.id,
+			promotion: promoteTo
 		});
 
 		if (move === null) {
