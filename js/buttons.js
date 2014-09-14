@@ -4,6 +4,7 @@ var _chess;
 var updateChess = function() {
 	_chess = new Chess();
 	_chess.load_pgn(chess.pgn());
+	return _chess;
 };
 
 // Creates a clone of the Lichess board and adds it to the DOM.
@@ -13,7 +14,7 @@ var createBoard = function() {
 
 	// Don't create another clone if one already exists.
 	// There's also no need to create a clone if no moves have been made.
-	if ($('.le-clone').length || _chess.history().length === 0) {
+	if ($('.le-clone').length/*|| _chess.history().length === 0*/) {
 		return;
 	}
 
@@ -29,11 +30,6 @@ var createBoard = function() {
 	$('.lichess_board:not(.le-clone) .piece').each(function() {
 		$(this).hide();
 	});
-
-	// If we're spectating, we don't need to do the last step, so return.
-	if (_ld_.player.spectator) {
-		return;
-	}
 
 	// Prevent the user from dragging around pieces in the clone.
 	$('.le-clone > div').each(function() {
@@ -104,6 +100,37 @@ var updateBoard = function() {
 
 	// 17 is the height of each row
 	$('#le-GameText').scrollTop(Math.floor((_history.length - 1) / 2) * 17);
+};
+
+var goToMove = function(move) {
+	var boardPosition = boardHistory[move - 1];
+
+	_chess = new Chess(boardPosition.fen);
+	createBoard();
+
+	// Update the clone's pieces to the new state.
+	// @todo Optimise.
+	$('.le-clone > div').each(function() {
+		$(this).find('.piece').remove();
+
+		var id = _chess.get($(this).attr('id'));
+
+		if (id === null) {
+			// A piece doesn't exist in this square, so return non-false value
+			// to skip next iteration.
+			return true;
+		}
+
+		$(this).append($('<div>', {
+			class: 'piece ' + piece[id.type] + ' ' + color[id.color]
+		}));
+	});
+
+	// Update the green glowing indicators that show what the last move was.
+	$('.le-clone .moved').removeClass('moved');
+
+	$('#' + boardPosition.move.from).addClass('moved');
+	$('#' + boardPosition.move.to).addClass('moved');
 };
 
 // Moves the clone to the start of the game.

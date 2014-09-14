@@ -37,14 +37,12 @@ if (le_history.length === 0) {
 // Add moveOn class to last move.
 $('#le-GameText a.le-move:last-child').addClass('moveOn');
 
-var goToMove = function(move) {
-
-};
-
 $('#le-GameText').on('click', 'a.le-move', function() {
 	$('#le-GameText .moveOn').removeClass('moveOn');
 	$(this).addClass('moveOn');
-	// goToMove(3);
+	
+	var moveNum = $(this).prop('id').split('-')[2];
+	goToMove(moveNum);
 });
 
 // Replacement for having onclick="this.blur();" on the elements.

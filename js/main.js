@@ -33,10 +33,23 @@ var loadInterface = function() {
 	$('.table_inner').before($pgn);
 };
 
+// Stores a FEN history of the board, with a FEN for each particular position,
+// as well as the move made to achieve that FEN.
+var boardHistory = [];
+
+var apiURL = 'http://' + location.host + '/api/game/' + _ld_.game.id + '?with_moves=1&with_fens=1';
+var loadMoves = function() {
+	$.get(apiURL, function(data) {
+		console.log(data);
+	});
+};
+
+loadMoves();
+
 var pgnURL = 'http://' + location.host + '/' + _ld_.game.id + '/pgn';
 var loadPGN = function() {
-	$.get(pgnURL, function(data) {
-		chess.load_pgn(data);
+	$.get(pgnURL, function(pgn) {
+		chess.load_pgn(pgn);
 		loadInterface();
 	}).fail(function() {
 		console.error('LE.Error: Could not load PGN from ' + pgnURL);
@@ -49,17 +62,17 @@ var loadPGN = function() {
 var chess = new Chess();
 
 // chess.js doesn't support chess960, so we disallow it for now.
-if (!_ld_.player.spectator && _ld_.game.variant !== 'chess960') {
-	var moves = _ld_.game.moves.split(' ');
-	for (var i = moves.length - 1; i >= 0; i--) {
-		chess.move(moves[moves.length - i - 1]);
-	}
-	loadInterface();
-} else {
+// if (!_ld_.player.spectator && _ld_.game.variant !== 'chess960') {
+// 	var moves = _ld_.game.moves.split(' ');
+// 	for (var i = moves.length - 1; i >= 0; i--) {
+// 		chess.move(moves[moves.length - i - 1]);
+// 	}
+// 	loadInterface();
+// } else {
 	if (_ld_.game.variant !== 'chess960') {
 		loadPGN();
 	}
-}
+// }
 
 // This doesn't seem to work if we set it via CSS, so for now we set it here.
 $('.moretime').css({'position':'absolute', 'right':'2px', 'top':'37px'});
@@ -131,13 +144,6 @@ updateScore();
 var from = null;
 var promoteTo = 'q';
 
-// Stores a FEN history of the board, with a FEN for each particular position,
-// an array for the move made to achieve that position, as well as an indicator
-// whether either side was in check.
-var boardHistory = [];
-
-var $gameText;
-
 var boardObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
 		
@@ -198,7 +204,10 @@ var boardObserver = new MutationObserver(function(mutations) {
 		boardHistory.push({
 			fen: chess.fen(),
 			inCheck: chess.in_check() ? chess.turn() : null,
-			move: [from, to]
+			move: {
+				from: from,
+				to: to
+			}
 		});
 
 		// If piece was taken, update score.
@@ -221,7 +230,7 @@ var boardObserver = new MutationObserver(function(mutations) {
 		var moveNum = chess.history().length / 2;
 		var moveStyle = cloneExists ? 'moveNew' : 'moveOn';
 
-		$gameText = $('#le-GameText');
+		var $gameText = $('#le-GameText');
 
 		// We might have hidden the PGN box earlier if we didn't have any moves.
 		// So now we show it again.
