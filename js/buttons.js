@@ -103,7 +103,7 @@ var updateBoard = function() {
 };
 
 var goToMove = function(move) {
-	var boardPosition = boardHistory[move - 1];
+	var boardPosition = FENs[move - 1];
 
 	_chess = new Chess(boardPosition.fen);
 	createBoard();
@@ -113,7 +113,7 @@ var goToMove = function(move) {
 	$('.le-clone > div').each(function() {
 		$(this).find('.piece').remove();
 
-		var id = _chess.get($(this).attr('id'));
+		var id = _chess.get($(this).prop('id'));
 
 		if (id === null) {
 			// A piece doesn't exist in this square, so return non-false value
@@ -129,8 +129,8 @@ var goToMove = function(move) {
 	// Update the green glowing indicators that show what the last move was.
 	$('.le-clone .moved').removeClass('moved');
 
-	$('#' + boardPosition.move.from).addClass('moved');
-	$('#' + boardPosition.move.to).addClass('moved');
+	$('#' + boardPosition.moved.from).addClass('moved');
+	$('#' + boardPosition.moved.to).addClass('moved');
 };
 
 // Moves the clone to the start of the game.

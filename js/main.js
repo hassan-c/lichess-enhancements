@@ -33,46 +33,36 @@ var loadInterface = function() {
 	$('.table_inner').before($pgn);
 };
 
-// Stores a FEN history of the board, with a FEN for each particular position,
-// as well as the move made to achieve that FEN.
-var boardHistory = [];
-
-var apiURL = 'http://' + location.host + '/api/game/' + _ld_.game.id + '?with_moves=1&with_fens=1';
-var loadMoves = function() {
-	$.get(apiURL, function(data) {
-		console.log(data);
-	});
-};
-
-loadMoves();
-
-var pgnURL = 'http://' + location.host + '/' + _ld_.game.id + '/pgn';
-var loadPGN = function() {
-	$.get(pgnURL, function(pgn) {
-		chess.load_pgn(pgn);
-		loadInterface();
-	}).fail(function() {
-		console.error('LE.Error: Could not load PGN from ' + pgnURL);
-	});
-};
-
-// Lichess allows us to access a list of all previous moves played in the game
-// via _ld_.game.moves only if we are not spectating.
-// We make an API call to access the PGN otherwise.
 var chess = new Chess();
 
-// chess.js doesn't support chess960, so we disallow it for now.
-// if (!_ld_.player.spectator && _ld_.game.variant !== 'chess960') {
-// 	var moves = _ld_.game.moves.split(' ');
-// 	for (var i = moves.length - 1; i >= 0; i--) {
-// 		chess.move(moves[moves.length - i - 1]);
-// 	}
-// 	loadInterface();
-// } else {
-	if (_ld_.game.variant !== 'chess960') {
-		loadPGN();
-	}
-// }
+// Stores a FEN history of the board, with a FEN for each particular position,
+// as well as the move made to achieve that FEN.
+var FENs = [];
+
+var apiURL = 'http://' + location.host + '/api/game/' + _ld_.game.id;
+var apiURLParams = '?with_moves=1&with_fens=1';
+
+var loadMoves = function() {
+	$.get(apiURL + apiURLParams, function(data) {
+		var moves = data.moves.split(' ');
+
+		for (var i = 0, l = moves.length; i < l; i++) {
+			var move = chess.move(moves[i]);
+			
+			FENs.push({
+				fen: i === 0 ? data.initialFen : data.fens[i - 1],
+				moved: {from: move.from, to: move.to}
+			});
+		}
+
+		loadInterface();
+	});
+};
+
+// chess.js doesn't support chess960, so we have to disable it for now.
+if (_ld_.game.variant !== 'chess960') {
+	loadMoves();
+}
 
 // This doesn't seem to work if we set it via CSS, so for now we set it here.
 $('.moretime').css({'position':'absolute', 'right':'2px', 'top':'37px'});
@@ -201,9 +191,8 @@ var boardObserver = new MutationObserver(function(mutations) {
 			return;
 		}
 
-		boardHistory.push({
+		FENs.push({
 			fen: chess.fen(),
-			inCheck: chess.in_check() ? chess.turn() : null,
 			move: {
 				from: from,
 				to: to
