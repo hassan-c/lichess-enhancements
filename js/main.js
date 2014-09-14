@@ -160,9 +160,11 @@ var boardObserver = new MutationObserver(function(mutations) {
 			return;
 		}
 
+		var to = mutation.target.id;
+
 		var move = chess.move({
 			from: from,
-			to: mutation.target.id,
+			to: to,
 			promotion: promoteTo
 		});
 

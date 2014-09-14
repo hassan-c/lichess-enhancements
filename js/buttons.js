@@ -1,5 +1,3 @@
-
-
 var _chess;
 
 // Creates a clone of our original chess object.
