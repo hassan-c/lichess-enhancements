@@ -255,8 +255,3 @@ $(document).keydown(function(event) {
 			break;
 	}
 });
-
-// Replacement for the onfocus="this.blur();" that was present previously.
-$('.le-game_control').focus(function() {
-	$(this).blur();
-});

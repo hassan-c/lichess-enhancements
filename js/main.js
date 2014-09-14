@@ -136,6 +136,8 @@ var promoteTo = 'q';
 // whether either side was in check.
 var boardHistory = [];
 
+var $gameText;
+
 var boardObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
 		
@@ -219,7 +221,7 @@ var boardObserver = new MutationObserver(function(mutations) {
 		var moveNum = chess.history().length / 2;
 		var moveStyle = cloneExists ? 'moveNew' : 'moveOn';
 
-		var $gameText = $('#le-GameText');
+		$gameText = $('#le-GameText');
 
 		// We might have hidden the PGN box earlier if we didn't have any moves.
 		// So now we show it again.
