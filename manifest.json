@@ -17,7 +17,8 @@
             "js": [
                 "js/vendor/jquery-2.1.1.min.js",
                 "js/vendor/chess.min.js",
-                "js/main.js"
+                "js/main.js",
+                "js/events.js"
             ]
         }
     ],

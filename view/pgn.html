@@ -37,12 +37,15 @@ if (le_history.length === 0) {
 // Add moveOn class to last move.
 $('#le-GameText a.le-move:last-child').addClass('moveOn');
 
-// Scrap this for now.
-// $('#le-GameText').on('click', 'a.le-move', function() {
-// 	$('#le-GameText .moveOn').removeClass('moveOn');
-// 	$(this).addClass('moveOn');
-//  goToMove(...)
-// });
+var goToMove = function(move) {
+
+};
+
+$('#le-GameText').on('click', 'a.le-move', function() {
+	$('#le-GameText .moveOn').removeClass('moveOn');
+	$(this).addClass('moveOn');
+	// goToMove(3);
+});
 
 // Replacement for having onclick="this.blur();" on the elements.
 $('#le-GameText').on('focus', 'a.le-move', function() {

@@ -131,6 +131,11 @@ updateScore();
 var from = null;
 var promoteTo = 'q';
 
+// Stores a FEN history of the board, with a FEN for each particular position,
+// an array for the move made to achieve that position, as well as an indicator
+// whether either side was in check.
+var boardHistory = [];
+
 var boardObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
 		
@@ -185,6 +190,12 @@ var boardObserver = new MutationObserver(function(mutations) {
 
 			return;
 		}
+
+		boardHistory.push({
+			fen: chess.fen(),
+			inCheck: chess.in_check() ? chess.turn() : null,
+			move: [from, to]
+		});
 
 		// If piece was taken, update score.
 		// Temporarily commented out due to the bug mentioned just above.

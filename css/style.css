@@ -4,7 +4,7 @@
 #le-GameText .le-move{font-family:'pgn4web ChessSansPiratf','pgn4web Liberation Sans',sans-serif;text-decoration:none;padding-top:3px;padding-bottom:3px;display:inline;color:#b57600;color:#444;}
 #le-GameText span{padding-right:0;}
 #le-GameText a{padding-right:4px;padding-left:4px;}
-/*#le-GameText a:hover{background:#e0e0e0;} scrap this for now */
+#le-GameText a:hover{background:#e0e0e0;}
 #le-GameText .comment{font-size:80%;display:block;}
 #le-GameText .moveOn{border:1px solid #909090;padding:2px 3px;}
 #le-GameText .moveNew{background-color:rgba(155,199,00,0.33);padding:2px 3px;}
