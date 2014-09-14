@@ -25,11 +25,11 @@ var _ld_ = JSON.parse(data_ld_);
 var loadInterface = function() {
 	// Append the playback and move history buttons to the page.
 	var $gameButtons = $('<div id="le-GameButtonsWrapper">');
-	$gameButtons.load(chrome.extension.getURL('view/game-buttons.html'));
+	$gameButtons.load(chrome.extension.getURL('views/game-buttons.html'));
 	$('.table_inner').before($gameButtons);
 
 	var $pgn = $('<div id="le-pgn">');
-	$pgn.load(chrome.extension.getURL('view/pgn.html'));
+	$pgn.load(chrome.extension.getURL('views/pgn.html'));
 	$('.table_inner').before($pgn);
 };
 

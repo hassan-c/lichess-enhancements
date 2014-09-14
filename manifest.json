@@ -24,7 +24,7 @@
     ],
 
     "web_accessible_resources": [
-        "view/game-buttons.html",
-        "view/pgn.html"
+        "views/game-buttons.html",
+        "views/pgn.html"
     ]
 }
