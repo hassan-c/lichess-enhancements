@@ -50,6 +50,7 @@ var goToMove = function(move, scrollTo) {
 		return;
 	}
 
+	stopAutoplay();
 	createBoard();
 
 	_chess = new Chess(FENs[move]);
@@ -110,7 +111,6 @@ var goToMove = function(move, scrollTo) {
 
 // Moves the clone to the start of the game.
 var moveToStart = function() {
-	stopAutoplay();
 	createBoard();
 
 	goToMove(0);
@@ -118,7 +118,6 @@ var moveToStart = function() {
 
 // Moves the clone back one move.
 var moveBackward = function() {
-	stopAutoplay();
 	createBoard();
 
 	goToMove(getCurrentMoveNum() - 1);
@@ -135,7 +134,6 @@ var moveForward = function() {
 		return;
 	}
 
-	stopAutoplay();
 	doMoveForward();
 };
 
