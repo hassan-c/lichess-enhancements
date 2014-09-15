@@ -254,3 +254,16 @@ boardObserver.observe(liBoard, {
 	childList: true,
 	subtree: true
 });
+
+// Add correct promotion to PGN.
+$(document).on('click', '#promotion_choice div', function() {
+	var lastMove = chess.undo();
+
+	var move = chess.move({
+		from: lastMove.from,
+		to: lastMove.to,
+		promotion: $(this).attr('data-piece').charAt(0)
+	});
+
+	$('a.le-move:last-child').text(move.san);
+});

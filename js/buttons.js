@@ -32,7 +32,7 @@ var piece = {
 };
 var color = {w: 'white', b: 'black'};
 
-var goToMove = function(move) {
+var goToMove = function(move, scrollTo) {
 	move = parseInt(move);
 
 	if (move === (FENs.length - 1)) {
@@ -83,7 +83,9 @@ var goToMove = function(move) {
 	// $('#le-GameText').scrollTop($('#le-move-' + (_history.length + 1)).position().top);
 
 	// 17 is the height of each row
-	$('#le-GameText').scrollTop(Math.floor((getCurrentMoveNum() + 1) / 2) * 17);
+	if (scrollTo !== false) {
+		$('#le-GameText').scrollTop(Math.floor((getCurrentMoveNum() - 1) / 2) * 17);
+	}
 
 	if (move < 1) {
 		return;
