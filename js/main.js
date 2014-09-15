@@ -174,9 +174,11 @@ var boardObserver = new MutationObserver(function(mutations) {
 
 		// If from or to are null, return. Also, we sometimes receive duplicate
 		// mutations, so ignore them.
-		if ((from === null || to === null) ||
+		if (typeof lastMove !== 'undefined') {
+			if ((from === null || to === null) ||
 			(lastMove.from === from && lastMove.to === to)) {
-			return;
+				return;
+			}
 		}
 
 		var move = chess.move({
@@ -190,12 +192,7 @@ var boardObserver = new MutationObserver(function(mutations) {
 		FENs.push(chess.fen());
 
 		// If piece was taken, update score.
-		// Temporarily commented out due to the bug mentioned just above.
-		// if (move.san.indexOf('x') > -1) {
-			updateScore();
-			// @todo Instead of re-calling this each mutation, just keep an in-
-			// house list of captured pieces and update from there.
-		// }
+		updateScore();
 
 		// Append new moves to the PGN.
 
