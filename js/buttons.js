@@ -69,8 +69,7 @@ var goToMove = function(move) {
 
 	// If in check, update the indicator.
 	if (_chess.in_check()) {
-		var col = chess.turn() === 'w' ? 'b' : 'w';
-		$('.le-clone .piece.king.' + color[col]).parent().addClass('check');
+		$('.le-clone .piece.king.' + color[chess.turn()]).parent().addClass('check');
 	}
 
 	$('.moveOn').removeClass('moveOn');
