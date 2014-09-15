@@ -209,8 +209,9 @@ var boardObserver = new MutationObserver(function(mutations) {
 		var $gameText = $('#le-GameText');
 
 		// We might have hidden the PGN box earlier if we didn't have any moves.
-		// So now we show it again.
+		// So now we show it again. Do same for playback buttons.
 		$gameText.show();
+		$('.le-game_control').show();
 
 		// @todo Clean this up.
 

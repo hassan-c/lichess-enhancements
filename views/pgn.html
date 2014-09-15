@@ -32,6 +32,7 @@ $('#le-GameText').html(pgn);
 // Hide the PGN box if we don't have any moves yet.
 if (le_history.length === 0) {
 	$('#le-GameText').hide();
+	$('.le-game_control').hide();
 }
 
 // Add moveOn class to last move.
