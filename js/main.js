@@ -143,6 +143,7 @@ var pieceLetters = {
 // Observe the board for moves being made and perform the same moves on the
 // chess.js board.
 var from = null;
+var lastMove;
 
 var boardObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
@@ -169,9 +170,6 @@ var boardObserver = new MutationObserver(function(mutations) {
 
 		var to = mutation.target.id;
 
-		var _history = chess.history({verbose: true});
-		var lastMove = _history[_history.length - 1];
-
 		// If from or to are null, return. Also, we sometimes receive duplicate
 		// mutations, so ignore them.
 		if (typeof lastMove !== 'undefined') {
@@ -192,6 +190,8 @@ var boardObserver = new MutationObserver(function(mutations) {
 		if (move === null) return;
 
 		FENs.push(chess.fen());
+
+		lastMove = {from: from, to: to};
 
 		// If piece was taken, update score.
 		updateScore();
