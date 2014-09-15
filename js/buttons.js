@@ -87,8 +87,8 @@ var goToMove = function(move, scrollTo) {
 	$('#le-move-' + move).addClass('moveOn');
 
 	var moveNew = $('#le-move-' + move + '.moveNew');
-	moveNew.prevAll('span:first').removeClass('moveNew');
 	moveNew.removeClass('moveNew');
+	moveNew.prevAll('.le-move').removeClass('moveNew');
 
 	// Doesn't seem to work... so for now, we do it the dirty way.
 	// $('#le-GameText').scrollTop($('#le-move-' + (_history.length + 1)).position().top);
