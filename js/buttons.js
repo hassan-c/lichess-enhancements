@@ -24,6 +24,16 @@ var createBoard = function() {
 	$('.le-clone > div').removeClass('ui-draggable ui-droppable selected');
 };
 
+var getCurrentMoveNum = function() {
+	var currentMove = $('.moveOn').prop('id');
+
+	if (!currentMove) {
+		return 0;
+	}
+
+	return parseInt(currentMove.split('-')[2]);
+};
+
 // Store piece and colour names in these objects so that we can convert them
 // to their full names by passing the first letter as the key.
 
@@ -68,8 +78,9 @@ var goToMove = function(move, scrollTo) {
 	$('.le-clone .check').removeClass('check');
 
 	// If in check, update the indicator.
-	if (_chess.in_check()) {
-		$('.le-clone .piece.king.' + color[chess.turn()]).parent().addClass('check');
+	if ($('#le-move-' + move).text().indexOf('+') > -1) {
+		var col = move % 2 === 0 ? 'white' : 'black';
+		$('.le-clone .piece.king.' + col).parent().addClass('check');
 	}
 
 	$('.moveOn').removeClass('moveOn');
@@ -95,16 +106,6 @@ var goToMove = function(move, scrollTo) {
 
 	$('#' + moved.from).addClass('moved');
 	$('#' + moved.to).addClass('moved');
-};
-
-var getCurrentMoveNum = function() {
-	var currentMove = $('.moveOn').prop('id');
-
-	if (!currentMove) {
-		return 0;
-	}
-
-	return parseInt(currentMove.split('-')[2]);
 };
 
 // Moves the clone to the start of the game.

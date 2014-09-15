@@ -146,16 +146,15 @@ var from = null;
 
 var boardObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
-		
-		if (_ld_.game.variant === 'chess960') {
-			updateScore();
-			return;
-		}
-
 		var mutationTarget = $(mutation.target);
 
 		// Only observe mutations from moves.
 		if (!mutationTarget.hasClass('moved')) {
+			return;
+		}
+
+		if (_ld_.game.variant === 'chess960') {
+			updateScore();
 			return;
 		}
 
@@ -170,6 +169,16 @@ var boardObserver = new MutationObserver(function(mutations) {
 
 		var to = mutation.target.id;
 
+		var _history = chess.history({verbose: true});
+		var lastMove = _history[_history.length - 1];
+
+		// If from or to are null, return. Also, we sometimes receive duplicate
+		// mutations, so ignore them.
+		if ((from === null || to === null) ||
+			(lastMove.from === from && lastMove.to === to)) {
+			return;
+		}
+
 		var move = chess.move({
 			from: from,
 			to: to,
@@ -177,31 +186,6 @@ var boardObserver = new MutationObserver(function(mutations) {
 			// When promoting, the piece name is at the end of the class.
 			promotion: pieceLetters[piece.attr('class').split(' ')[2]] || 'q'
 		});
-
-		if (move === null) {
-
-			// Sometimes we receive extraneous mutations due to capturing or
-			// castling. In these cases, we simply return.
-			//
-			// There is a rarer case which tends to occur if the page happens to
-			// load slowly. When this happens, we aren't able to keep up with
-			// the mutations until the page fully loads and this results in LE
-			// becoming out-of-sync with Lichess.
-			//
-			// We can know when this has happened by detecting if the last-last
-			// move was null *and* the last move in the history did not involve
-			// castling.
-			// 
-			// But at the moment, it doesn't seem to work. 
-
-			// if (rawMoveHistory[rawMoveHistory.length - 2] === null
-			// 	&& oldHistory[oldHistory.length - 1].indexOf('O') === -1) {
-
-			// 	console.log('something gone wrong... reloading pgn');
-			// }
-
-			return;
-		}
 
 		FENs.push(chess.fen());
 
