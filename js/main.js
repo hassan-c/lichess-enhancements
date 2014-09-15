@@ -46,19 +46,19 @@ var loadMoves = function() {
 	$.get(apiURL + apiURLParams, function(data) {
 		var moves = data.moves.split(' ');
 
-		moves.forEach(function(move) {
-			var move = chess.move(move);
-		});
+		for (var i = 0, l = moves.length; i < l;  i++) {
+			chess.move(moves[i]);
+		}
 
 		// Push initial FEN.
 		FENs.push('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 		
 		if (typeof data.fens !== 'undefined') {
-			data.fens.forEach(function(FEN) {
+			for (var i = 0, l = data.fens.length; i < l; i++) {
 				// Must add - - 0 1 or chess.js doesn't recognise it as a valid
 				// FEN.
-				FENs.push(FEN + ' ' + chess.turn() + ' - - 0 1');
-			});
+				FENs.push(data.fens[i] + ' ' + chess.turn() + ' - - 0 1');
+			}
 		}
 		
 		loadInterface();
