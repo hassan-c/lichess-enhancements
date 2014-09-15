@@ -46,15 +46,17 @@ var loadMoves = function() {
 	$.get(apiURL + apiURLParams, function(data) {
 		var moves = data.moves.split(' ');
 
-		for (var i = 0, l = moves.length; i < l; i++) {
-			var move = chess.move(moves[i]);
-			
-			FENs.push({
-				fen: i === 0 ? data.initialFen : data.fens[i - 1],
-				moved: {from: move.from, to: move.to}
-			});
-		}
+		moves.forEach(function(move) {
+			var move = chess.move(move);
+		});
 
+		// Push initial FEN.
+		FENs.push('rkrqnnbb/pppppppp/8/8/8/8/PPPPPPPP/RKRQNNBB w KQkq - 0 1');
+		data.fens.forEach(function(FEN) {
+			// Must add - - 0 1 or chess.js doesn't recognise it as a valid FEN.
+			FENs.push(FEN + ' ' + chess.turn() + ' - - 0 1');
+		});
+		
 		loadInterface();
 	});
 };
@@ -191,13 +193,7 @@ var boardObserver = new MutationObserver(function(mutations) {
 			return;
 		}
 
-		FENs.push({
-			fen: chess.fen(),
-			move: {
-				from: from,
-				to: to
-			}
-		});
+		FENs.push(chess.fen());
 
 		// If piece was taken, update score.
 		// Temporarily commented out due to the bug mentioned just above.

@@ -1,11 +1,11 @@
 var _chess;
 
 // Creates a clone of our original chess object.
-var updateChess = function() {
-	_chess = new Chess();
-	_chess.load_pgn(chess.pgn());
-	return _chess;
-};
+// var updateChess = function() {
+// 	_chess = new Chess();
+// 	_chess.load_pgn(chess.pgn());
+// 	return _chess;
+// };
 
 // Creates a clone of the Lichess board and adds it to the DOM.
 // @todo? Don't add clone to DOM until we have finished calling updateBoard().
@@ -15,6 +15,7 @@ var createBoard = function() {
 	// Don't create another clone if one already exists.
 	// There's also no need to create a clone if no moves have been made.
 	if ($('.le-clone').length/*|| _chess.history().length === 0*/) {
+		// $('.le-clone').remove();
 		return;
 	}
 
@@ -103,9 +104,14 @@ var updateBoard = function() {
 };
 
 var goToMove = function(move) {
-	var boardPosition = FENs[move - 1];
+	move = parseInt(move);
 
-	_chess = new Chess(boardPosition.fen);
+	if (move >= FENs.length) {
+		moveToEnd();
+		return;
+	}
+
+	_chess = new Chess(FENs[move]);
 	createBoard();
 
 	// Update the clone's pieces to the new state.
@@ -129,54 +135,73 @@ var goToMove = function(move) {
 	// Update the green glowing indicators that show what the last move was.
 	$('.le-clone .moved').removeClass('moved');
 
-	$('#' + boardPosition.moved.from).addClass('moved');
-	$('#' + boardPosition.moved.to).addClass('moved');
+	// If the current clone-state has a check, remove the indicator.
+	$('.le-clone .check').removeClass('check');
+
+	// If in check, update the indicator.
+	if (_chess.in_check()) {
+		$('.le-clone .piece.king.' + color[chess.turn()]).parent().addClass('check');
+	}
+
+	var moved = chess.history({verbose: true})[move - 1];
+
+	$('#' + moved.from).addClass('moved');
+	$('#' + moved.to).addClass('moved');
+
+	$('.moveOn').removeClass('moveOn');
+	$('#le-move-' + move).addClass('moveOn');
 };
 
 // Moves the clone to the start of the game.
 var moveToStart = function() {
-	if (!$('.le-clone').length) {
-		updateChess();
-	}
+	// if (!$('.le-clone').length) {
+	// 	updateChess();
+	// }
 
 	stopAutoplay();
 	createBoard();
 
-	_chess.reset();
-
-	updateBoard();
+	goToMove(0);
 };
 
 // Moves the clone back one move.
 var moveBackward = function() {
-	if (!$('.le-clone').length) {
-		updateChess();
-	}
+	// if (!$('.le-clone').length) {
+	// 	updateChess();
+	// }
 
 	stopAutoplay();
 	createBoard();
 
-	_chess.undo();
+	var curMove = parseInt($('.moveOn').prop('id').split('-')[2]);
+	goToMove(curMove - 1);
 
-	updateBoard();
+	// Doesn't seem to work... so for now, we do it the dirty way.
+	// $('#le-GameText').scrollTop($('#le-move-' + (_history.length + 1)).position().top);
+
+	// 17 is the height of each row
+	$('#le-GameText').scrollTop(Math.floor((curMove - 1) / 2) * 17);
 };
 
 // Move the clone forward one move.
 // We separate this from moveForward() so we can call it from doAutoplay().
 var doMoveForward = function() {
-	_chess.move(chess.history()[_chess.history().length]);
+	// _chess.move(chess.history()[_chess.history().length]);
 
 	// We're already on the last move.
-	if (_chess.history().length === chess.history().length) {
-		moveToEnd();
-		return;
-	}
+	// if (_chess.history().length === chess.history().length) {
+	// 	moveToEnd();
+	// 	return;
+	// }
 
-	updateBoard();
+	// updateBoard();
 
 	var moveNew = $('#le-move-' + _chess.history().length + '.moveNew');
 	moveNew.prevAll('span:first').removeClass('moveNew');
 	moveNew.removeClass('moveNew');
+
+	var curMove = parseInt($('.moveOn').prop('id').split('-')[2]);
+	goToMove(curMove + 1);
 };
 
 var moveForward = function() {
