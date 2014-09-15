@@ -80,6 +80,12 @@ var goToMove = function(move) {
 	moveNew.prevAll('span:first').removeClass('moveNew');
 	moveNew.removeClass('moveNew');
 
+	// Doesn't seem to work... so for now, we do it the dirty way.
+	// $('#le-GameText').scrollTop($('#le-move-' + (_history.length + 1)).position().top);
+
+	// 17 is the height of each row
+	$('#le-GameText').scrollTop(Math.floor((getCurrentMoveNum() + 1) / 2) * 17);
+
 	if (move < 1) {
 		return;
 	}
@@ -114,12 +120,6 @@ var moveBackward = function() {
 	createBoard();
 
 	goToMove(getCurrentMoveNum() - 1);
-
-	// Doesn't seem to work... so for now, we do it the dirty way.
-	// $('#le-GameText').scrollTop($('#le-move-' + (_history.length + 1)).position().top);
-
-	// 17 is the height of each row
-	$('#le-GameText').scrollTop(Math.floor((curMove + 1) / 2) * 17);
 };
 
 // Move the clone forward one move.

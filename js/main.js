@@ -51,7 +51,7 @@ var loadMoves = function() {
 		});
 
 		// Push initial FEN.
-		FENs.push('rkrqnnbb/pppppppp/8/8/8/8/PPPPPPPP/RKRQNNBB w KQkq - 0 1');
+		FENs.push('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 		data.fens.forEach(function(FEN) {
 			// Must add - - 0 1 or chess.js doesn't recognise it as a valid FEN.
 			FENs.push(FEN + ' ' + chess.turn() + ' - - 0 1');
