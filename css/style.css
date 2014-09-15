@@ -1,6 +1,6 @@
 /* PGN css. Modified excerpt from http://lichess1.org/assets/stylesheets/analyse.css?v=351 */
 
-#le-GameText{font-size:12px;padding:5px 7px;border:1px solid #ccc;overflow:auto;position:absolute;top:32px;left:241px;border-radius:0 2px 2px 0;max-height:160px;width:125px;}
+#le-GameText{font-size:12px;padding:5px 7px;border:1px solid #ccc;overflow:auto;position:absolute;top:33px;left:241px;border-radius:0 2px 2px 0;max-height:160px;width:125px;}
 #le-GameText .le-move{font-family:'pgn4web ChessSansPiratf','pgn4web Liberation Sans',sans-serif;text-decoration:none;padding-top:3px;padding-bottom:3px;display:inline;color:#b57600;color:#444;}
 #le-GameText span{padding-right:0;}
 #le-GameText a{padding-right:4px;padding-left:4px;}

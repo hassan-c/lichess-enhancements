@@ -140,7 +140,8 @@ var goToMove = function(move) {
 
 	// If in check, update the indicator.
 	if (_chess.in_check()) {
-		$('.le-clone .piece.king.' + color[chess.turn()]).parent().addClass('check');
+		var col = chess.turn() === 'w' ? 'b' : 'w';
+		$('.le-clone .piece.king.' + color[col]).parent().addClass('check');
 	}
 
 	var moved = chess.history({verbose: true})[move - 1];
@@ -148,7 +149,7 @@ var goToMove = function(move) {
 	$('#' + moved.from).addClass('moved');
 	$('#' + moved.to).addClass('moved');
 
-	$('.moveOn').removeClass('moveOn');
+	$('.moveOn').removeClass('moveOn moveNew');
 	$('#le-move-' + move).addClass('moveOn');
 };
 
@@ -196,11 +197,14 @@ var doMoveForward = function() {
 
 	// updateBoard();
 
-	var moveNew = $('#le-move-' + _chess.history().length + '.moveNew');
-	moveNew.prevAll('span:first').removeClass('moveNew');
-	moveNew.removeClass('moveNew');
-
 	var curMove = parseInt($('.moveOn').prop('id').split('-')[2]);
+
+	// var moveNew = $('#le-move-' + move + '.moveNew');
+	// moveNew.prevAll('span:first').removeClass('moveNew');
+	// moveNew.removeClass('moveNew');
+
+	$('#le-move-' + move).removeClass('moveNew');
+
 	goToMove(curMove + 1);
 };
 
