@@ -189,6 +189,8 @@ var boardObserver = new MutationObserver(function(mutations) {
 			promotion: pieceLetters[piece.attr('class').split(' ')[2]] || 'q'
 		});
 
+		if (move === null) return;
+
 		FENs.push(chess.fen());
 
 		// If piece was taken, update score.
