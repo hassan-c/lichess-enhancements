@@ -28,14 +28,10 @@ var createBoard = function() {
 
 	// Pieces sometimes flicker while you are viewing earlier moves and a new
 	// move is made in the game. This is a temporary fix.
-	$('.lichess_board:not(.le-clone) .piece').each(function() {
-		$(this).hide();
-	});
+	$('.lichess_board:not(.le-clone) .piece').hide();
 
 	// Prevent the user from dragging around pieces in the clone.
-	$('.le-clone > div').each(function() {
-		$(this).removeClass('ui-draggable ui-droppable selected');
-	});
+	$('.le-clone > div').removeClass('ui-draggable ui-droppable selected');
 };
 
 // Store piece and colour names in these objects so that we can convert them
@@ -106,7 +102,7 @@ var updateBoard = function() {
 var goToMove = function(move) {
 	move = parseInt(move);
 
-	if (move >= FENs.length) {
+	if (move === (FENs.length - 1)) {
 		moveToEnd();
 		return;
 	}
@@ -230,9 +226,7 @@ var moveToEnd = function() {
 
 	// Temporary fix for piece-flicker problem--see createBoard() above.
 	$('.lichess_board:not(.le-clone)').show();
-	$('.lichess_board:not(.le-clone) .piece').each(function() {
-		$(this).show();
-	});
+	$('.lichess_board:not(.le-clone) .piece').show();
 
 	$('.moveNew').removeClass('moveNew');
 	$('.moveOn').removeClass('moveOn');
