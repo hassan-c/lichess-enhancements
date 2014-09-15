@@ -17,7 +17,7 @@ script.appendChild(document.createTextNode('('+ get_ld_ +')();'));
 var data_ld_ = $('body').attr('data-_ld_');
 
 if (typeof data_ld_ === 'undefined') {
-	throw new Error('Lichess Enhancements stopped: _ld_ is undefined.');
+	throw new Error('Lichess Enhancements: main.js aborted (_ld_ is undefined).');
 }
 
 var _ld_ = JSON.parse(data_ld_);

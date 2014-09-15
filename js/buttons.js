@@ -1,3 +1,7 @@
+if (typeof _ld_ === 'undefined') {
+	throw new Error('Lichess Enhancements: buttons.js aborted (_ld_ is undefined).');
+}
+
 var _chess;
 
 // Creates a clone of the Lichess board and adds it to the DOM.
@@ -45,12 +49,11 @@ var color = {w: 'white', b: 'black'};
 var goToMove = function(move, scrollTo) {
 	move = parseInt(move);
 
-	if (move === (FENs.length - 1)) {
+	if (move >= (FENs.length - 1)) {
 		moveToEnd();
 		return;
 	}
 
-	stopAutoplay();
 	createBoard();
 
 	_chess = new Chess(FENs[move]);
@@ -111,30 +114,26 @@ var goToMove = function(move, scrollTo) {
 
 // Moves the clone to the start of the game.
 var moveToStart = function() {
-	createBoard();
+	stopAutoplay();
 
+	createBoard();
 	goToMove(0);
 };
 
 // Moves the clone back one move.
 var moveBackward = function() {
-	createBoard();
+	stopAutoplay();
 
+	createBoard();
 	goToMove(getCurrentMoveNum() - 1);
 };
 
-// Move the clone forward one move.
-// We separate this from moveForward() so we can call it from doAutoplay().
-var doMoveForward = function() {
-	goToMove(getCurrentMoveNum() + 1);
-};
-
 var moveForward = function() {
-	if (!$('.le-clone').length) {
-		return;
-	}
+	stopAutoplay();
 
-	doMoveForward();
+	// If we're calling this function, then the clone already exists. Thus there
+	// is no need to call createBoard().
+	goToMove(getCurrentMoveNum() + 1);
 };
 
 // Destroys the clone, returning to the latest move.
@@ -178,12 +177,12 @@ var doAutoplay = function() {
 	}
 
 	// Eliminates the initial delay.
-	doMoveForward();
+	goToMove(getCurrentMoveNum() + 1);
 
 	// @todo Make delay configurable through an options page.
 	var delay = 1000;
 	autoplay = setInterval(function() {
-		doMoveForward();
+		goToMove(getCurrentMoveNum() + 1);
 	}, delay);
 };
 
