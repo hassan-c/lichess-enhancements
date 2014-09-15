@@ -135,10 +135,14 @@ var updateScore = function() {
 
 updateScore();
 
+// Used for the chess.js promotion parameter.
+var pieceLetters = {
+	queen: 'q', bishop: 'b', knight: 'n', rook: 'r'
+};
+
 // Observe the board for moves being made and perform the same moves on the
 // chess.js board.
 var from = null;
-var promoteTo = 'q';
 
 var boardObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
@@ -169,7 +173,9 @@ var boardObserver = new MutationObserver(function(mutations) {
 		var move = chess.move({
 			from: from,
 			to: to,
-			promotion: promoteTo
+
+			// When promoting, the piece name is at the end of the class.
+			promotion: pieceLetters[piece.attr('class').split(' ')[2]] || 'q'
 		});
 
 		if (move === null) {
@@ -257,13 +263,18 @@ boardObserver.observe(liBoard, {
 
 // Add correct promotion to PGN.
 $(document).on('click', '#promotion_choice div', function() {
-	var lastMove = chess.undo();
+	var pieceLetter = pieceLetters[$(this).attr('data-piece')];
 
+	FENs.pop();
+
+	var lastMove = chess.undo();
 	var move = chess.move({
 		from: lastMove.from,
 		to: lastMove.to,
-		promotion: $(this).attr('data-piece').charAt(0)
+		promotion: pieceLetter
 	});
+
+	FENs.push(chess.fen());
 
 	$('a.le-move:last-child').text(move.san);
 });
