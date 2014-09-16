@@ -43,7 +43,8 @@ $('#le-GameText').on('click', 'a.le-move', function() {
 	$(this).addClass('moveOn');
 	
 	var moveNum = $(this).prop('id').split('-')[2];
-	
+
+	stopAutoplay();
 	goToMove(moveNum, false);
 });
 
