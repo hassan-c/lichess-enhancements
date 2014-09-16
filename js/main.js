@@ -10,8 +10,36 @@ var get_ld_ = function() {
 	$('body').attr('data-_ld_', JSON.stringify(_ld_));
 };
 
+chrome.storage.sync.get(['useOldSounds'], function(data) {
+	if (data.useOldSounds === 'false') {
+		return;
+	}
+
+	$('body').attr('data-le-sound-dir', chrome.extension.getURL('sounds/'));
+
+	var modifySounds = function() {
+		var soundDir = $('body').attr('data-le-sound-dir');
+
+		$.sound.move = function() {
+			var moveSound = new Audio(soundDir + 'move.ogg');
+			moveSound.volume = storage.get('sound-volume');
+			moveSound.play();
+		};
+
+		$.sound.take = function() {
+			var takeSound = new Audio(soundDir + 'take.ogg');
+			takeSound.volume = storage.get('sound-volume');
+			takeSound.play();
+		};
+	};
+
+	var script = document.createElement('script');
+	script.appendChild(document.createTextNode('('+ modifySounds + ')();'));
+	(document.body || document.head || document.documentElement).appendChild(script);
+});
+
 var script = document.createElement('script');
-script.appendChild(document.createTextNode('('+ get_ld_ +')();'));
+script.appendChild(document.createTextNode('('+ get_ld_ + ')();'));
 (document.body || document.head || document.documentElement).appendChild(script);
 
 var data_ld_ = $('body').attr('data-_ld_');

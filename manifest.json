@@ -10,6 +10,9 @@
         "128": "img/knight_plus_128.png"
     },
 
+    "options_page": "options.html",
+    "permissions": ["storage"],
+
     "content_scripts": [
         {
             "matches": ["http://*.lichess.org/*"],
@@ -25,6 +28,8 @@
 
     "web_accessible_resources": [
         "views/game-buttons.html",
-        "views/pgn.html"
+        "views/pgn.html",
+        "sounds/move.ogg",
+        "sounds/take.ogg"
     ]
 }

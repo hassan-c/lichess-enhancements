@@ -1,0 +1,52 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 2em 4em;
+	font-family: 'Segoe UI Light';
+}
+
+h2 {
+	letter-spacing: -1px;
+}
+
+input[type="text"]:focus {
+	outline: none;
+}
+
+input[type="text"] {
+	font-family: 'Segoe UI Light';
+	padding: 6px 12px;
+	font-size: 16px;
+}
+
+input[type="button"] {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	font-family: 'Segoe UI Light';
+	padding: 7px 20px;
+	font-size: 16px;
+}
+
+input[type="button"]:hover {
+	border: 1px solid #666;
+}
+
+input[type="button"]:active {
+	background-color: #eee;
+}
+
+input[type="button"]:focus {
+	outline: none;
+}
+
+input[type="checkbox"] {
+	border: 0;
+	background-color: #fff;
+}
+
+#main, #status {
+	margin: 1em 0;
+}
