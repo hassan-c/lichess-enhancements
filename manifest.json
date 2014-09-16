@@ -3,7 +3,7 @@
 
     "name": "Lichess Enhancements",
     "description": "Go back and view earlier moves during the game, see a relative score based on captured pieces, and more.",
-    "version": "0.1.0.0",
+    "version": "0.1.1.0",
 
     "icons": {
         "48": "img/knight_plus_48.png",
