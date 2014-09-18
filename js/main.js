@@ -34,12 +34,12 @@ chrome.storage.sync.get(['useOldSounds'], function(data) {
 	};
 
 	var script = document.createElement('script');
-	script.appendChild(document.createTextNode('('+ modifySounds + ')();'));
+	script.appendChild(document.createTextNode('(' + modifySounds + ')();'));
 	(document.body || document.head || document.documentElement).appendChild(script);
 });
 
 var script = document.createElement('script');
-script.appendChild(document.createTextNode('('+ get_ld_ + ')();'));
+script.appendChild(document.createTextNode('(' + get_ld_ + ')();'));
 (document.body || document.head || document.documentElement).appendChild(script);
 
 var data_ld_ = $('body').attr('data-_ld_');
@@ -273,15 +273,13 @@ boardObserver.observe(liBoard, {
 
 // Add correct promotion to PGN.
 $(document).on('click', '#promotion_choice div', function() {
-	var pieceLetter = pieceLetters[$(this).attr('data-piece')];
-
 	FENs.pop();
 
 	var lastMove = chess.undo();
 	var move = chess.move({
 		from: lastMove.from,
 		to: lastMove.to,
-		promotion: pieceLetter
+		promotion: pieceLetters[$(this).attr('data-piece')]
 	});
 
 	FENs.push(chess.fen());
