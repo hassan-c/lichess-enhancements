@@ -10,6 +10,16 @@ var get_ld_ = function() {
 	$('body').attr('data-_ld_', JSON.stringify(_ld_));
 };
 
+var script = document.createElement('script');
+script.appendChild(document.createTextNode('(' + get_ld_ + ')();'));
+(document.body || document.head || document.documentElement).appendChild(script);
+
+var data_ld_ = $('body').attr('data-_ld_');
+
+if (typeof data_ld_ === 'undefined') {
+	throw new Error('Lichess Enhancements: main.js aborted (_ld_ is undefined).');
+}
+
 chrome.storage.sync.get(['useOldSounds'], function(data) {
 	if (data.useOldSounds === 'false') {
 		return;
@@ -37,16 +47,6 @@ chrome.storage.sync.get(['useOldSounds'], function(data) {
 	script.appendChild(document.createTextNode('(' + modifySounds + ')();'));
 	(document.body || document.head || document.documentElement).appendChild(script);
 });
-
-var script = document.createElement('script');
-script.appendChild(document.createTextNode('(' + get_ld_ + ')();'));
-(document.body || document.head || document.documentElement).appendChild(script);
-
-var data_ld_ = $('body').attr('data-_ld_');
-
-if (typeof data_ld_ === 'undefined') {
-	throw new Error('Lichess Enhancements: main.js aborted (_ld_ is undefined).');
-}
 
 var _ld_ = JSON.parse(data_ld_);
 
@@ -245,11 +245,13 @@ var boardObserver = new MutationObserver(function(mutations) {
 
 		if (!Number.isInteger(moveNum)) {
 			var realMoveNum = Math.ceil(moveNum);
-			moveMarkup += ((realMoveNum === 1 ? '' : '<br />') + '<span class="le-move notranslate ' + (moveStyle === 'moveNew' ? 'moveNew' : '') + '">' +  realMoveNum + '.</span>');
+			moveMarkup += (realMoveNum === 1 ? '' : '<br />') + '<span class="le-move notranslate ' +
+				(moveStyle === 'moveNew' ? 'moveNew' : '') + '">' +  realMoveNum + '.</span>';
 		}
 
 		
-		moveMarkup += ('<a class="le-move notranslate ' + moveStyle + '" id="le-move-' + (moveNum * 2) + '">' + move.san + '</a>');
+		moveMarkup += '<a class="le-move notranslate ' + moveStyle +
+			'" id="le-move-' + (moveNum * 2) + '">' + move.san + '</a>';
 
 		$gameText.append(moveMarkup);
 
